@@ -2,7 +2,7 @@
 
 # ~/perl/setup/DB.pm
 
-package Setup::DB;
+package setup::DB;
 
 use strict;
 use warnings;

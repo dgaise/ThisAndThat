@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-package Setup::Merchant;
+package setup::Merchant;
 
 use strict;
 use warnings;

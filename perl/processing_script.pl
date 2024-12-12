@@ -1,5 +1,4 @@
 #!/usr/bin/env perl
-use Setup::myConnect;
 
 use strict;
 use warnings;
@@ -9,12 +8,10 @@ use DBI; # DBI & DBD::Pg modules installed using cpan
 use Readonly;
 use Time::HiRes;
 use Time::Piece;
-# Add the directory containing Def.pm to the @INC array
-use lib '~ThisAndThat/perl/setup';
-
-use Setup::Def qw(
+use setup::Def qw(
   %BillingStatus %BillingStatus_Reverse
-);  
+);
+
 use Setup::DB; 
 use Setup::Merchant;
 use Setup::myConnect;
@@ -264,7 +261,7 @@ SQL
   else {
     my $mid = get_merchant_id($merchant_name);
     $sql .= <<SQL;
-   AND t.billing_status_id IN ($AUTHORIZE_PENDING, $CAPTURE_PENDING, $REFUND_PENDING)
+   AND t.billing_status_id IN ($AUTH_PENDING, $CAPTURE_PENDING, $REFUND_PENDING)
    AND t.merchant_id = $mid
 SQL
   }
@@ -389,7 +386,7 @@ sub bad_enumeration {
       # if it's not, then we're done
 
       if (! defined $bad_transaction_status ||
-          ( $bad_transaction_status != $AUTHORIZE_PENDING &&
+          ( $bad_transaction_status != $AUTH_PENDING &&
             $bad_transaction_status != $CAPTURE_PENDING &&
             $bad_transaction_status != $REFUND_PENDING )
       ) {
@@ -522,7 +519,7 @@ sub disposition_display {
   if (! defined $disp_id) {
     return "has a current_disposition_id of NULL";
   }
-  my $disp_str = $VIN_TransactionDispositionTypes_Reverse{$disp_id}; 
+  my $disp_str = "TBD"; 
   return "has a disposition of $disp_str ($disp_id)";
 }
 
@@ -535,7 +532,7 @@ SELECT t.billing_status_id, t.current_disposition_id
   FROM transaction AS t
   INNER JOIN latest_transaction_detail AS ltd ON ltd.transaction_id = t.id
   INNER JOIN transaction_detail        AS td  ON td.id = ltd.transaction_detail_id
- WHERE td.payment_provider_id = $LITLE_PAYMENT_PROVIDER_ID
+ WHERE td.payment_provider_id = $PAYMENT_PROVIDER_ID
    AND t.merchant_tx_identifier = '$bad_transaction' and t.current_merchant_ts > now() - interval '2 days'
 SQL
   chomp $sql; # there's a newline we don't need

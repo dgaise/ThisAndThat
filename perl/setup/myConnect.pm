@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-package Setup::myConnect;
+package setup::myConnect;
 
 use strict;
 use warnings;

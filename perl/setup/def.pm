@@ -1,11 +1,12 @@
 #!/usr/bin/env perl
 
-# ~/perl/setup/def.pm
+# ~/perl/setup/Def.pm
 
-package Setup::Def;  # Define the package
+package setup::Def;  # Define the package
 
 use strict;
 use warnings;
+use Exporter qw(import);
 
 # Define the %BRD_BillingStatus hash
 our %BillingStatus = (
@@ -24,6 +25,11 @@ our %BillingStatus = (
 );
 
 # Define the reverse lookup hash %BillingStatus_Reverse
-our %BillingStatus_Reverse = reverse %BRD_BillingStatus;
+our %BillingStatus_Reverse = reverse %BillingStatus;
+
+our @EXPORT_OK = qw(
+  %BillingStatus
+  %BillingStatus_Reverse
+);
 
 1;
